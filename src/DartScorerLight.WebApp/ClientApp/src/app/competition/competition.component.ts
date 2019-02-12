@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompetitionComponent implements OnInit {
 
+  public selectedGameType = '501';
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  public changeGameType(type: string): void {
+    this.selectedGameType = type;
+  }
 }

@@ -1,3 +1,20 @@
-<p>
-  competition works!
-</p>
+<div class="row game-type-container">
+  <div class="col-12 game-type-label">Spielart wählen:</div>
+  <div class="row">
+    <div class="col-sm-12 col-lg-4">
+      <mat-radio-button class="game-201" [value]="201" (change)="changeGameType('201')">
+        Spiel 201
+      </mat-radio-button>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <mat-radio-button class="game-301" [value]="301" (change)="changeGameType('301')">
+        Spiel 301
+      </mat-radio-button>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <mat-radio-button class="game-501" [value]="501" (change)="changeGameType('501')" checked="true">
+        Spiel 501
+      </mat-radio-button>
+    </div>
+  </div>
+</div>

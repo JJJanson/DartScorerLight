@@ -1,3 +1,5 @@
+@import "../../styles-variables.less";
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -13,6 +15,13 @@ html {
   }
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.active-navbar-item {
+  text-decoration: underline;
+}
+
+a.text-light {
+  &:hover, &:active {
+    color: white!important;
+    background-color: lighten(@dart-red, 10%)!important;
+  }
 }

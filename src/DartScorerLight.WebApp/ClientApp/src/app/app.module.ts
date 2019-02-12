@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
 import { CompetitionComponent } from './competition/competition.component';
 import { StatisticComponent } from './statistic/statistic.component';
 
@@ -32,7 +33,8 @@ import { StatisticComponent } from './statistic/statistic.component';
       { path: 'statistic', component: StatisticComponent },
       { path: '**', redirectTo: '/' }
     ]),
-    MatCardModule
+    MatCardModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

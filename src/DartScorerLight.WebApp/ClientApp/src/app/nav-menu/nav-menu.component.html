@@ -1,21 +1,21 @@
 <header>
-  <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-5'>
+  <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dart-red border-bottom shadow p-1 mb-5'>
     <div class="container">
-      <a class="navbar-brand text-dark" [routerLink]='["/"]'>Dart Scorer</a>
+      <a class="navbar-brand text-light" [routerLink]='["/"]'>Dart Scorer</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/competition"]'>Neues Spiel</a>
+          <li class="nav-item" [routerLinkActive]='["active-navbar-item"]'>
+            <a class="nav-link text-light" [routerLink]='["/competition"]'>Neues Spiel</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/player"]'>Spielerkonfiguration</a>
+          <li class="nav-item" [routerLinkActive]='["active-navbar-item"]'>
+            <a class="nav-link text-light" [routerLink]='["/player"]'>Spielerkonfiguration</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/statistic"]'>Statistiken</a>
+          <li class="nav-item" [routerLinkActive]='["active-navbar-item"]'>
+            <a class="nav-link text-light" [routerLink]='["/statistic"]'>Statistiken</a>
           </li>
         </ul>
       </div>
