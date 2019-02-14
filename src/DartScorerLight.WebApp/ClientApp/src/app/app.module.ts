@@ -1,17 +1,17 @@
 import { PlayerComponent } from './player/player.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule, MatInputModule, MatRadioModule } from '@angular/material';
 import { CompetitionComponent } from './competition/competition.component';
 import { StatisticComponent } from './statistic/statistic.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -24,8 +24,10 @@ import { StatisticComponent } from './statistic/statistic.component';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'competition', component: CompetitionComponent },
@@ -34,7 +36,8 @@ import { StatisticComponent } from './statistic/statistic.component';
       { path: '**', redirectTo: '/' }
     ]),
     MatCardModule,
-    MatRadioModule
+    MatRadioModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

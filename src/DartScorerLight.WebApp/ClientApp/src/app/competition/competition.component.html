@@ -1,20 +1,29 @@
-<div class="row game-type-container">
-  <div class="col-12 game-type-label"><h3>Spielart wählen:</h3></div>
+<form [formGroup]="gameSettingForm">
   <div class="row">
-    <div class="col-sm-12 col-lg-4">
-      <mat-radio-button class="game-201" [value]="201" (change)="changeGameType('201')">
+    <div class="col-12 setting-label">
+      <h3>Spielart wählen:</h3>
+    </div>
+    <mat-radio-group formControlName="gameTypeControl">
+      <mat-radio-button class="game-201" [value]="'201'" ng-style="{'display':'inline'}">
         Spiel 201
       </mat-radio-button>
-    </div>
-    <div class="col-sm-12 col-lg-4">
-      <mat-radio-button class="game-301" [value]="301" (change)="changeGameType('301')">
+      <mat-radio-button class="game-301" [value]="'301'" ng-style="{'display':'inline'}">
         Spiel 301
       </mat-radio-button>
-    </div>
-    <div class="col-sm-12 col-lg-4">
-      <mat-radio-button class="game-501" [value]="501" (change)="changeGameType('501')" checked="true">
+      <mat-radio-button class="game-501" [value]="'501'" ng-style="{'display':'inline'}">
         Spiel 501
       </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div class="row">
+    <div class="col-12 setting-label">
+      <h3>Anzahl Spieler:</h3>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 nopadding">
+      <mat-form-field color="accent">
+        <input matInput type="number" placeholder="Spieleranzahl" min="1" formControlName="playerCountControl" #playerCountInputComp>
+        <mat-error *ngIf="playerCountControl.invalid">Es muss mindestens 1 Spieler ausgewählt werden</mat-error>
+      </mat-form-field>
     </div>
   </div>
-</div>
+</form>
