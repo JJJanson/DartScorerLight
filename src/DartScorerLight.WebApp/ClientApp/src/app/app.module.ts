@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { MatCardModule, MatInputModule, MatRadioModule } from '@angular/material';
+import { MatCardModule, MatInputModule, MatRadioModule, MatAutocompleteModule } from '@angular/material';
 import { CompetitionComponent } from './competition/competition.component';
 import { StatisticComponent } from './statistic/statistic.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,7 +37,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ]),
     MatCardModule,
     MatRadioModule,
-    MatInputModule
+    MatInputModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
