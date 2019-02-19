@@ -41,7 +41,7 @@
     <div class="col-12 setting-label">
       <h5>Spielerauswahl:</h5>
     </div>
-    <div class="col-sm-12 col-lg-5 nopadding"
+    <div class="col-sm-12 col-lg-5 nopadding player-select"
          *ngFor="let player of this.playerObj; let i = index">
       <mat-form-field color="accent">
         <input type="text"
@@ -52,7 +52,7 @@
         <mat-autocomplete autoActiveFirstOption
                           (optionSelected)="selectPlayer($event, i)"
                           #auto="matAutocomplete">
-          <mat-option *ngFor="let playerName of playerList"
+          <mat-option *ngFor="let playerName of filteredPlayerList | async"
                       [value]="playerName">
             {{playerName}}
           </mat-option>

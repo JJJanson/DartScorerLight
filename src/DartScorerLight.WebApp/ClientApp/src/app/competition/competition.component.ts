@@ -1,13 +1,15 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, SimpleChange, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { Observable, of, Subscription } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-competition',
   templateUrl: './competition.component.html',
   styleUrls: ['./competition.component.less']
 })
-export class CompetitionComponent implements OnInit, AfterViewInit {
+export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('playerCountInputComp') playerCountInputComp: ElementRef;
 
@@ -18,9 +20,12 @@ export class CompetitionComponent implements OnInit, AfterViewInit {
   public playerObj: string[];
   public playerFormControls: FormControl[];
   public playerList = ['Jonas', 'Jelena'];
+  public filteredPlayerList: Observable<string[]>;
 
   private selectedGameType = '501';
   private palyerCount = 1;
+
+  private _subscriptions = new Array<Subscription>();
 
   constructor(
   ) { }
@@ -28,10 +33,14 @@ export class CompetitionComponent implements OnInit, AfterViewInit {
   public ngOnInit() {
     this.createForm();
     this.refreshPlayerObj();
+    this.setPlayerAutoCompleteEvents();
+    this.filteredPlayerList = of(this.playerList);
   }
 
   public ngAfterViewInit(): void {
-    this.playerCountInputComp.nativeElement.focus();
+    setTimeout(() => {
+      this.playerCountInputComp.nativeElement.focus();
+    }, 500);
   }
 
   public createForm(): void {
@@ -43,7 +52,8 @@ export class CompetitionComponent implements OnInit, AfterViewInit {
       playerCountControl: this.playerCountControl
     });
 
-    this.gameSettingForm.valueChanges.subscribe(() => {
+
+    const gameSettingSub = this.gameSettingForm.valueChanges.subscribe(() => {
       this.selectedGameType = this.gameTypeControl.value;
 
       if (this.playerCountControl.value > 1) {
@@ -53,12 +63,16 @@ export class CompetitionComponent implements OnInit, AfterViewInit {
       }
 
       this.refreshPlayerObj();
+      this.setPlayerAutoCompleteEvents();
       this.playerCountInputComp.nativeElement.focus();
     });
+
+    this._subscriptions.push(gameSettingSub);
   }
 
   public selectPlayer(event: MatAutocompleteSelectedEvent, index: number) {
     this.playerObj[index] = event.option.value;
+    this.filteredPlayerList = of(this.playerList);
   }
 
   private refreshPlayerObj(): void {
@@ -83,5 +97,28 @@ export class CompetitionComponent implements OnInit, AfterViewInit {
     newPlayerArray.push(playerName);
     const formControl = new FormControl(playerName, [Validators.required]);
     this.playerFormControls.push(formControl);
+  }
+
+  private setPlayerAutoCompleteEvents(): void {
+    this.playerFormControls.forEach(playerControl => {
+      const sub = playerControl.valueChanges.subscribe(value => {
+        this.filteredPlayerList = of(this.filter(value));
+      });
+
+      this._subscriptions.push(sub);
+    });
+  }
+
+  private filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.playerList.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    });
   }
 }
