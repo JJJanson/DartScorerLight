@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, SimpleChange, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Observable, of, Subscription } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-competition',
@@ -28,7 +27,10 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   private _subscriptions = new Array<Subscription>();
 
   constructor(
-  ) { }
+    private _snackBar: MatSnackBar
+  ) {
+    // ignore
+  }
 
   public ngOnInit() {
     this.createForm();
@@ -73,6 +75,14 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectPlayer(event: MatAutocompleteSelectedEvent, index: number) {
     this.playerObj[index] = event.option.value;
     this.filteredPlayerList = of(this.playerList);
+  }
+
+  public startGame(): void {
+    this.showNotification('test');
+  }
+
+  public showNotification(message: string): void {
+    this._snackBar.open(message, undefined);
   }
 
   private refreshPlayerObj(): void {

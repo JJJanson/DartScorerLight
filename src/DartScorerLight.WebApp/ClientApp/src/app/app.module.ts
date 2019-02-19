@@ -8,7 +8,8 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { MatCardModule, MatInputModule, MatRadioModule, MatAutocompleteModule } from '@angular/material';
+// tslint:disable-next-line:max-line-length
+import { MatCardModule, MatInputModule, MatRadioModule, MatAutocompleteModule, MatButtonModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig } from '@angular/material';
 import { CompetitionComponent } from './competition/competition.component';
 import { StatisticComponent } from './statistic/statistic.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,9 +39,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatCardModule,
     MatRadioModule,
     MatInputModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatSnackBarModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      } as MatSnackBarConfig
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
