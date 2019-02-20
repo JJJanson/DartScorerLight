@@ -11,6 +11,7 @@ import { Observable, of, Subscription } from 'rxjs';
 export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('playerCountInputComp') playerCountInputComp: ElementRef;
+  @ViewChild('submitButton') submitButton: any;
 
   public gameSettingForm: FormGroup;
   public gameTypeControl: FormControl;
@@ -75,14 +76,26 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectPlayer(event: MatAutocompleteSelectedEvent, index: number) {
     this.playerObj[index] = event.option.value;
     this.filteredPlayerList = of(this.playerList);
+    if (!this.playerObj.includes(undefined)) {
+      this.submitButton._elementRef.nativeElement.focus();
+    }
   }
 
   public startGame(): void {
-    this.showNotification('test');
+    if (this.gameSettingForm.invalid || this.playerFormControls.find(c => c.invalid) !== undefined) {
+      this.showNotification('Es sind nicht alle Felder korrekt ausgefüllt');
+    } else {
+      alert('Game on');
+    }
   }
 
   public showNotification(message: string): void {
-    this._snackBar.open(message, undefined);
+    const snackBarRef = this._snackBar.open(message, 'Schließen');
+    const snackBarSub = snackBarRef.onAction().subscribe(() => {
+      snackBarRef.dismiss();
+    });
+
+    this._subscriptions.push(snackBarSub);
   }
 
   private refreshPlayerObj(): void {

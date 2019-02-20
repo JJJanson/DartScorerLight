@@ -46,8 +46,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   providers: [
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
-        horizontalPosition: 'right',
-        verticalPosition: 'top'
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['custom-snack-bar-styling']
       } as MatSnackBarConfig
     }
   ],
