@@ -1,0 +1,12 @@
+<ng-container *ngIf="(viewDto$ | async) as viewDto; else loadingIndicator">
+  Start {{viewDto.startCounter}}
+</ng-container>
+<ng-template #loadingIndicator>
+  <div class="loading-indicator">
+    <mat-progress-spinner class="spinner-size"
+                          color="accent"
+                          mode="indeterminate"
+                          [diameter]="40">
+    </mat-progress-spinner>
+  </div>
+</ng-template>

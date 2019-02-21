@@ -9,10 +9,11 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 // tslint:disable-next-line:max-line-length
-import { MatCardModule, MatInputModule, MatRadioModule, MatAutocompleteModule, MatButtonModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig } from '@angular/material';
+import { MatCardModule, MatInputModule, MatRadioModule, MatAutocompleteModule, MatButtonModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig, MatProgressSpinnerModule } from '@angular/material';
 import { CompetitionComponent } from './competition/competition.component';
 import { StatisticComponent } from './statistic/statistic.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClassicDartsGameComponent } from './competition/classic-darts-game/classic-darts-game.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     CompetitionComponent,
     PlayerComponent,
-    StatisticComponent
+    StatisticComponent,
+    ClassicDartsGameComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,6 +34,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'competition', component: CompetitionComponent },
+      { path: 'competition/:type', component: ClassicDartsGameComponent },
       { path: 'player', component: PlayerComponent },
       { path: 'statistic', component: StatisticComponent },
       { path: '**', redirectTo: '/' }
@@ -41,7 +44,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatInputModule,
     MatAutocompleteModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy } fr
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Observable, of, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-competition',
@@ -28,7 +29,8 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   private _subscriptions = new Array<Subscription>();
 
   constructor(
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _router: Router
   ) {
     // ignore
   }
@@ -85,7 +87,7 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.gameSettingForm.invalid || this.playerFormControls.find(c => c.invalid) !== undefined) {
       this.showNotification('Es sind nicht alle Felder korrekt ausgefüllt');
     } else {
-      alert('Game on');
+      this._router.navigate(['competition', this.selectedGameType]);
     }
   }
 
