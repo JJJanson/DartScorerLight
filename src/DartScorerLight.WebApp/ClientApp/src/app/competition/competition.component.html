@@ -1,74 +1,128 @@
-<form [formGroup]="gameSettingForm"
-      (ngSubmit)="startGame()">
-  <div class="row">
-    <div class="col-12 setting-label">
-      <h3>Spielart wählen:</h3>
-    </div>
-    <mat-radio-group formControlName="gameTypeControl">
-      <mat-radio-button class="game-201"
-                        [value]="'201'"
-                        ng-style="{'display':'inline'}">
-        Spiel 201
-      </mat-radio-button>
-      <mat-radio-button class="game-301"
-                        [value]="'301'"
-                        ng-style="{'display':'inline'}">
-        Spiel 301
-      </mat-radio-button>
-      <mat-radio-button class="game-501"
-                        [value]="'501'"
-                        ng-style="{'display':'inline'}">
-        Spiel 501
-      </mat-radio-button>
-    </mat-radio-group>
-  </div>
-  <div class="row">
-    <div class="col-12 setting-label">
-      <h3>Spieler:</h3>
-    </div>
-    <div class="col-sm-12 col-md-12 col-lg-6 nopadding">
-      <mat-form-field color="accent">
-        <input matInput
-               type="number"
-               placeholder="Spieleranzahl"
-               min="1"
-               formControlName="playerCountControl"
-               #playerCountInputComp>
-        <mat-error *ngIf="playerCountControl.invalid">Es muss mindestens 1 Spieler ausgewählt werden</mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="row player-design">
-    <div class="col-12 setting-label">
-      <h5>Spielerauswahl:</h5>
-    </div>
-    <div class="col-sm-12 col-lg-5 nopadding player-select"
-         *ngFor="let player of this.playerObj; let i = index">
-      <mat-form-field color="accent">
-        <input type="text"
-               placeholder="Spieler {{i+1}}"
-               matInput
-               [formControl]="playerFormControls[i]"
-               [matAutocomplete]="auto">
-        <mat-autocomplete autoActiveFirstOption
-                          (optionSelected)="selectPlayer($event, i)"
-                          #auto="matAutocomplete">
-          <mat-option *ngFor="let playerName of filteredPlayerList | async"
-                      [value]="playerName">
-            {{playerName}}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="playerFormControls[i].invalid">Ein Spieler muss ausgewählt werden!</mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="row align-end">
-    <div class="col-sm-12 col-md-4 col-lg-4 nopadding">
-      <button color="accent"
-              class="start-game-button"
-              type="submit"
-              #submitButton
-              mat-raised-button>Spiel starten</button>
-    </div>
-  </div>
+<form [formGroup]="gameSettingForm">
+  <mat-accordion class="example-headers-align">
+    <mat-expansion-panel [expanded]="step === 0"
+                         (opened)="setStep(0)"
+                         hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Spielart
+        </mat-panel-title>
+        <mat-panel-description class="mat-expansion-panel-header-description">
+          Wählen Sie die Spielart
+          <mat-icon>account_circle</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="row nomargin">
+        <mat-radio-group formControlName="gameTypeControl">
+          <mat-radio-button class="game-201"
+                            [value]="'201'"
+                            ng-style="{'display':'inline'}">
+            Spiel 201
+          </mat-radio-button>
+          <mat-radio-button class="game-301"
+                            [value]="'301'"
+                            ng-style="{'display':'inline'}">
+            Spiel 301
+          </mat-radio-button>
+          <mat-radio-button class="game-501"
+                            [value]="'501'"
+                            ng-style="{'display':'inline'}">
+            Spiel 501
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-action-row>
+        <button mat-button
+                color="accent"
+                (click)="nextStep()">Weiter</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="step === 1"
+                         (opened)="setStep(1)"
+                         hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Spieleranzahl
+        </mat-panel-title>
+        <mat-panel-description class="mat-expansion-panel-header-description">
+          Wählen teilnehmende Spieleranzahl
+          <mat-icon>map</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <mat-form-field color="accent">
+            <input matInput
+                   type="number"
+                   placeholder="Anzahl"
+                   min="1"
+                   formControlName="playerCountControl"
+                   #playerCountInputComp>
+            <mat-error *ngIf="playerCountControl.invalid">Es muss mindestens 1 Spieler ausgewählt werden</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-action-row>
+        <button mat-button
+                color="warn"
+                (click)="prevStep()">Zurück</button>
+        <button mat-button
+                color="accent"
+                (click)="nextStep()">Weiter</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 2"
+                         (opened)="setStep(2)"
+                         hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Spielerauswahl
+        </mat-panel-title>
+        <mat-panel-description class="mat-expansion-panel-header-description">
+          Wählen Sie die teilnehmenden Spieler
+          <mat-icon>date_range</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="row player-design">
+        <div class="col-sm-12 col-lg-5 player-select"
+             *ngFor="let player of this.playerObj; let i = index">
+          <mat-form-field color="accent">
+            <input type="text"
+                   placeholder="Spieler {{i+1}}"
+                   matInput
+                   [formControl]="playerFormControls[i]"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption
+                              (optionSelected)="selectPlayer($event, i)"
+                              #auto="matAutocomplete"
+                              [displayWith]="autoCompleteDisplayFn">
+              <mat-option *ngFor="let playerDto of filteredPlayerList | async"
+                          [value]="playerDto.name">
+                {{playerDto.name}} - {{playerDto.alias}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="playerFormControls[i].invalid">Ein Spieler muss ausgewählt werden!</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-action-row>
+        <button mat-button
+                color="warn"
+                (click)="prevStep()">Zurück</button>
+        <button color="accent"
+                type="submit"
+                #submitButton
+                (keypress.enter)="startGame()"
+                (click)="startGame()"
+                mat-raised-button>Spiel starten</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
 </form>

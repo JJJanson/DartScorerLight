@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Observable, of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { MainService } from '../shared/services/main.service';
+import { PlayerDto } from '../shared/dtos/player-dto';
+import { type } from 'os';
 
 @Component({
   selector: 'app-competition',
@@ -14,14 +17,17 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('playerCountInputComp') playerCountInputComp: ElementRef;
   @ViewChild('submitButton') submitButton: any;
 
+  public autoCompleteDisplayFn: () => void;
+
   public gameSettingForm: FormGroup;
   public gameTypeControl: FormControl;
   public playerCountControl: FormControl;
 
-  public playerObj: string[];
+  public step = 0;
+  public playerObj: PlayerDto[];
   public playerFormControls: FormControl[];
-  public playerList = ['Jonas', 'Jelena'];
-  public filteredPlayerList: Observable<string[]>;
+  public playerList: PlayerDto[] = [{ name: 'Jonas', alias: 'JJJanson', id: 1 }, { name: 'Jelena', alias: 'Jele', id: 2 }];
+  public filteredPlayerList: Observable<PlayerDto[]>;
 
   private selectedGameType = '501';
   private palyerCount = 1;
@@ -30,9 +36,10 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _router: Router
+    private _router: Router,
+    private _mainService: MainService
   ) {
-    // ignore
+    this.autoCompleteDisplayFn = this.autoCompleteDisplay.bind(this);
   }
 
   public ngOnInit() {
@@ -46,6 +53,18 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       this.playerCountInputComp.nativeElement.focus();
     }, 500);
+  }
+
+  public setStep(index: number): void {
+    this.step = index;
+  }
+
+  public nextStep(): void {
+    this.step++;
+  }
+
+  public prevStep(): void {
+    this.step--;
   }
 
   public createForm(): void {
@@ -76,17 +95,26 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public selectPlayer(event: MatAutocompleteSelectedEvent, index: number) {
-    this.playerObj[index] = event.option.value;
+    this.playerObj[index] = this.playerList.find(p => p.name === event.option.value);
     this.filteredPlayerList = of(this.playerList);
     if (!this.playerObj.includes(undefined)) {
       this.submitButton._elementRef.nativeElement.focus();
     }
   }
 
+  public autoCompleteDisplay(name: string): string {
+    if (!name || typeof (name) === 'object') {
+      return '';
+    }
+
+    return name;
+  }
+
   public startGame(): void {
-    if (this.gameSettingForm.invalid || this.playerFormControls.find(c => c.invalid) !== undefined) {
+    if (this.playerCountControl.invalid || this.playerFormControls.find(c => c.invalid) !== undefined) {
       this.showNotification('Es sind nicht alle Felder korrekt ausgefüllt');
     } else {
+      this._mainService.playerList = this.playerObj;
       this._router.navigate(['competition', this.selectedGameType]);
     }
   }
@@ -101,7 +129,7 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refreshPlayerObj(): void {
-    const newArray = new Array<string>();
+    const newArray = new Array<PlayerDto>();
     this.playerFormControls = new Array();
 
     for (let index = 0; index < this.palyerCount; index++) {
@@ -112,13 +140,13 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
 
-      this.addPlayer(newArray, '', index);
+      this.addPlayer(newArray, {} as PlayerDto, index);
     }
 
     this.playerObj = newArray;
   }
 
-  private addPlayer(newPlayerArray: string[], playerName: string, index: number): void {
+  private addPlayer(newPlayerArray: PlayerDto[], playerName: PlayerDto, index: number): void {
     newPlayerArray.push(playerName);
     const formControl = new FormControl(playerName, [Validators.required]);
     this.playerFormControls.push(formControl);
@@ -134,9 +162,9 @@ export class CompetitionComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private filter(value: string): string[] {
+  private filter(value: string): PlayerDto[] {
     const filterValue = value.toLowerCase();
-    return this.playerList.filter(option => option.toLowerCase().includes(filterValue));
+    return this.playerList.filter(option => option.name.toLowerCase().includes(filterValue) || option.alias.toLowerCase().includes(filterValue));
   }
 
   public ngOnDestroy(): void {
